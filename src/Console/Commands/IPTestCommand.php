@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Laravel GeoIP - IP Geolocation with Automatic Fallback
+ * Laravel IP - IP Geolocation with Automatic Fallback
  *
- * @package     geoipradar/laravel-geoip
+ * @package     geoipradar/laravel-ip
  * @author      GeoIPRadar <support@geoipradar.com>
  * @copyright   GeoIPRadar.com
  * @license     MIT
@@ -14,23 +14,23 @@
  * ============================================================================
  */
 
-namespace GeoIPRadar\LaravelGeoIP\Console\Commands;
+namespace GeoIPRadar\LaravelIP\Console\Commands;
 
-use GeoIPRadar\LaravelGeoIP\Facades\GeoIP;
+use GeoIPRadar\LaravelIP\Facades\IP;
 use Illuminate\Console\Command;
 
-class GeoIPTestCommand extends Command
+class IPTestCommand extends Command
 {
     /**
      * The name and signature of the console command.
      */
-    protected $signature = 'geoip:test
+    protected $signature = 'ip:test
                             {--ip=8.8.8.8 : The IP address to test with}';
 
     /**
      * The console command description.
      */
-    protected $description = 'Test all configured GeoIP providers (Powered by GeoIPRadar.com)';
+    protected $description = 'Test all configured IP providers (Powered by GeoIPRadar.com)';
 
     /**
      * Execute the console command.
@@ -40,7 +40,7 @@ class GeoIPTestCommand extends Command
         $this->displayHeader();
 
         $ip = $this->option('ip');
-        $providers = GeoIP::providers();
+        $providers = IP::providers();
 
         if (empty($providers)) {
             $this->error('No providers configured!');
@@ -66,7 +66,7 @@ class GeoIPTestCommand extends Command
 
             try {
                 $start = microtime(true);
-                $result = GeoIP::lookupWith($name, $ip);
+                $result = IP::lookupWith($name, $ip);
                 $time = round((microtime(true) - $start) * 1000, 2);
 
                 $status = '<fg=green>✓ Working</>';
@@ -95,7 +95,7 @@ class GeoIPTestCommand extends Command
         $this->newLine();
         $this->line('╔══════════════════════════════════════════════════════════════╗');
         $this->line('║                                                              ║');
-        $this->line('║   <fg=cyan>GeoIP Provider Test</> - Powered by <fg=green>GeoIPRadar.com</>          ║');
+        $this->line('║   <fg=cyan>IP Provider Test</> - Powered by <fg=green>GeoIPRadar.com</>              ║');
         $this->line('║                                                              ║');
         $this->line('╚══════════════════════════════════════════════════════════════╝');
         $this->newLine();
@@ -108,7 +108,7 @@ class GeoIPTestCommand extends Command
     {
         $this->newLine();
 
-        if (! GeoIP::isGeoIPRadarConfigured()) {
+        if (! IP::isGeoIPRadarConfigured()) {
             $this->line('┌──────────────────────────────────────────────────────────────┐');
             $this->line('│                                                              │');
             $this->line('│  <fg=yellow>⚠ GeoIPRadar.com is not configured!</>                        │');

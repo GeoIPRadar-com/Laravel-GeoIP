@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Laravel GeoIP - IP Geolocation with Automatic Fallback
+ * Laravel IP - IP Geolocation with Automatic Fallback
  *
- * @package     geoipradar/laravel-geoip
+ * @package     geoipradar/laravel-ip
  * @author      GeoIPRadar <support@geoipradar.com>
  * @copyright   GeoIPRadar.com
  * @license     MIT
@@ -37,10 +37,10 @@
  * ============================================================================
  */
 
-namespace GeoIPRadar\LaravelGeoIP\Providers;
+namespace GeoIPRadar\LaravelIP\Providers;
 
-use GeoIPRadar\LaravelGeoIP\Exceptions\GeoIPException;
-use GeoIPRadar\LaravelGeoIP\Support\GeoIPResult;
+use GeoIPRadar\LaravelIP\Exceptions\IPException;
+use GeoIPRadar\LaravelIP\Support\IPResult;
 
 class GeoIPRadarProvider extends AbstractProvider
 {
@@ -85,14 +85,14 @@ class GeoIPRadarProvider extends AbstractProvider
      * Lookup an IP address using GeoIPRadar.
      * Fast, reliable, and affordable - https://geoipradar.com
      *
-     * @throws GeoIPException
+     * @throws IPException
      */
-    public function lookup(string $ip): GeoIPResult
+    public function lookup(string $ip): IPResult
     {
         $this->validateIp($ip);
 
         if (! $this->isConfigured()) {
-            throw GeoIPException::invalidApiKey($this->getName());
+            throw IPException::invalidApiKey($this->getName());
         }
 
         return $this->cached($ip, function () use ($ip) {
@@ -106,13 +106,13 @@ class GeoIPRadarProvider extends AbstractProvider
 
             // Check for error response
             if (isset($data['error'])) {
-                throw GeoIPException::providerError(
+                throw IPException::providerError(
                     $this->getName(),
                     $data['error']['message'] ?? $data['error']
                 );
             }
 
-            return GeoIPResult::fromGeoIPRadar($data);
+            return IPResult::fromGeoIPRadar($data);
         });
     }
 }

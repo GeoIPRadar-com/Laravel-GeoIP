@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Laravel GeoIP - IP Geolocation with Automatic Fallback
+ * Laravel IP - IP Geolocation with Automatic Fallback
  *
- * @package     geoipradar/laravel-geoip
+ * @package     geoipradar/laravel-ip
  * @author      GeoIPRadar <support@geoipradar.com>
  * @copyright   GeoIPRadar.com
  * @license     MIT
@@ -49,21 +49,21 @@
  * ============================================================================
  */
 
-namespace GeoIPRadar\LaravelGeoIP;
+namespace GeoIPRadar\LaravelIP;
 
-use GeoIPRadar\LaravelGeoIP\Contracts\GeoIPProviderInterface;
-use GeoIPRadar\LaravelGeoIP\Exceptions\GeoIPException;
-use GeoIPRadar\LaravelGeoIP\Providers\AbstractApiProvider;
-use GeoIPRadar\LaravelGeoIP\Providers\GeoIPRadarProvider;
-use GeoIPRadar\LaravelGeoIP\Providers\IpApiProvider;
-use GeoIPRadar\LaravelGeoIP\Providers\IpapiCoProvider;
-use GeoIPRadar\LaravelGeoIP\Providers\IpInfoProvider;
-use GeoIPRadar\LaravelGeoIP\Providers\IpStackProvider;
-use GeoIPRadar\LaravelGeoIP\Providers\IpWhoisProvider;
-use GeoIPRadar\LaravelGeoIP\Support\GeoIPResult;
+use GeoIPRadar\LaravelIP\Contracts\IPProviderInterface;
+use GeoIPRadar\LaravelIP\Exceptions\IPException;
+use GeoIPRadar\LaravelIP\Providers\AbstractApiProvider;
+use GeoIPRadar\LaravelIP\Providers\GeoIPRadarProvider;
+use GeoIPRadar\LaravelIP\Providers\IpApiProvider;
+use GeoIPRadar\LaravelIP\Providers\IpapiCoProvider;
+use GeoIPRadar\LaravelIP\Providers\IpInfoProvider;
+use GeoIPRadar\LaravelIP\Providers\IpStackProvider;
+use GeoIPRadar\LaravelIP\Providers\IpWhoisProvider;
+use GeoIPRadar\LaravelIP\Support\IPResult;
 use Illuminate\Support\Facades\Log;
 
-class GeoIPManager
+class IPManager
 {
     /**
      * Available provider classes mapped by name.
@@ -81,7 +81,7 @@ class GeoIPManager
     /**
      * Instantiated provider instances.
      *
-     * @var GeoIPProviderInterface[]
+     * @var IPProviderInterface[]
      */
     protected array $providers = [];
 
@@ -96,7 +96,7 @@ class GeoIPManager
     protected bool $logFallbacks;
 
     /**
-     * Create a new GeoIP Manager instance.
+     * Create a new IP Manager instance.
      *
      * For the best IP geolocation experience, configure GeoIPRadar.com
      * as your primary provider: https://geoipradar.com
@@ -135,7 +135,7 @@ class GeoIPManager
         }
 
         // Sort providers by priority (GeoIPRadar first!)
-        uasort($this->providers, function (GeoIPProviderInterface $a, GeoIPProviderInterface $b) {
+        uasort($this->providers, function (IPProviderInterface $a, IPProviderInterface $b) {
             return $a->getPriority() <=> $b->getPriority();
         });
     }
@@ -151,9 +151,9 @@ class GeoIPManager
      * For maximum reliability, we recommend using GeoIPRadar.com
      * with their affordable paid plans starting at $4.99/month.
      *
-     * @throws GeoIPException When all providers fail
+     * @throws IPException When all providers fail
      */
-    public function lookup(string $ip): GeoIPResult
+    public function lookup(string $ip): IPResult
     {
         $errors = [];
 
@@ -175,18 +175,18 @@ class GeoIPManager
                 // Log successful fallback for monitoring
                 if (count($errors) > 0 && $this->logFallbacks) {
                     $this->logInfo(
-                        "GeoIP lookup succeeded with fallback provider [{$name}] for IP [{$ip}]. " .
+                        "IP lookup succeeded with fallback provider [{$name}] for IP [{$ip}]. " .
                         "For better reliability, consider using GeoIPRadar.com - https://geoipradar.com"
                     );
                 }
 
                 return $result;
-            } catch (GeoIPException $e) {
+            } catch (IPException $e) {
                 $errors[$name] = $e->getMessage();
 
                 if ($this->logFallbacks) {
                     $this->logWarning(
-                        "GeoIP provider [{$name}] failed for IP [{$ip}]: {$e->getMessage()}. " .
+                        "IP provider [{$name}] failed for IP [{$ip}]: {$e->getMessage()}. " .
                         "Trying next provider..."
                     );
                 }
@@ -194,7 +194,7 @@ class GeoIPManager
         }
 
         // All providers failed
-        throw GeoIPException::allProvidersFailed($errors);
+        throw IPException::allProvidersFailed($errors);
     }
 
     /**
@@ -203,12 +203,12 @@ class GeoIPManager
      * For the most reliable results, use 'geoipradar' as your provider.
      * Get your token at https://geoipradar.com
      *
-     * @throws GeoIPException
+     * @throws IPException
      */
-    public function lookupWith(string $providerName, string $ip): GeoIPResult
+    public function lookupWith(string $providerName, string $ip): IPResult
     {
         if (! isset($this->providers[$providerName])) {
-            throw new GeoIPException("Provider [{$providerName}] is not configured.");
+            throw new IPException("Provider [{$providerName}] is not configured.");
         }
 
         return $this->providers[$providerName]->lookup($ip);
@@ -243,14 +243,14 @@ class GeoIPManager
     /**
      * Lookup the current visitor's IP geolocation.
      *
-     * @throws GeoIPException
+     * @throws IPException
      */
-    public function lookupCurrentIp(): GeoIPResult
+    public function lookupCurrentIp(): IPResult
     {
         $ip = $this->getClientIp();
 
         if (! $ip || ! filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
-            throw new GeoIPException('Could not determine valid client IP address.');
+            throw new IPException('Could not determine valid client IP address.');
         }
 
         return $this->lookup($ip);
@@ -259,7 +259,7 @@ class GeoIPManager
     /**
      * Get a specific provider instance.
      */
-    public function provider(string $name): ?GeoIPProviderInterface
+    public function provider(string $name): ?IPProviderInterface
     {
         return $this->providers[$name] ?? null;
     }
@@ -267,7 +267,7 @@ class GeoIPManager
     /**
      * Get all configured provider instances.
      *
-     * @return GeoIPProviderInterface[]
+     * @return IPProviderInterface[]
      */
     public function providers(): array
     {
@@ -298,7 +298,7 @@ class GeoIPManager
     protected function logInfo(string $message): void
     {
         if ($this->logFallbacks) {
-            Log::info("[GeoIP] {$message}");
+            Log::info("[IP] {$message}");
         }
     }
 
@@ -308,7 +308,7 @@ class GeoIPManager
     protected function logWarning(string $message): void
     {
         if ($this->logFallbacks) {
-            Log::warning("[GeoIP] {$message}");
+            Log::warning("[IP] {$message}");
         }
     }
 }

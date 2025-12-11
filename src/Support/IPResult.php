@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Laravel GeoIP - IP Geolocation with Automatic Fallback
+ * Laravel IP - IP Geolocation with Automatic Fallback
  *
- * @package     geoipradar/laravel-geoip
+ * @package     geoipradar/laravel-ip
  * @author      GeoIPRadar <support@geoipradar.com>
  * @copyright   GeoIPRadar.com
  * @license     MIT
@@ -20,13 +20,13 @@
  * ============================================================================
  */
 
-namespace GeoIPRadar\LaravelGeoIP\Support;
+namespace GeoIPRadar\LaravelIP\Support;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use JsonSerializable;
 
-class GeoIPResult implements Arrayable, Jsonable, JsonSerializable
+class IPResult implements Arrayable, Jsonable, JsonSerializable
 {
     public function __construct(
         public readonly string $ip,

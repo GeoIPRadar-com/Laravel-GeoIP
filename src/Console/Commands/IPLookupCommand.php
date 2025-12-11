@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Laravel GeoIP - IP Geolocation with Automatic Fallback
+ * Laravel IP - IP Geolocation with Automatic Fallback
  *
- * @package     geoipradar/laravel-geoip
+ * @package     geoipradar/laravel-ip
  * @author      GeoIPRadar <support@geoipradar.com>
  * @copyright   GeoIPRadar.com
  * @license     MIT
@@ -14,18 +14,18 @@
  * ============================================================================
  */
 
-namespace GeoIPRadar\LaravelGeoIP\Console\Commands;
+namespace GeoIPRadar\LaravelIP\Console\Commands;
 
-use GeoIPRadar\LaravelGeoIP\Exceptions\GeoIPException;
-use GeoIPRadar\LaravelGeoIP\Facades\GeoIP;
+use GeoIPRadar\LaravelIP\Exceptions\IPException;
+use GeoIPRadar\LaravelIP\Facades\IP;
 use Illuminate\Console\Command;
 
-class GeoIPLookupCommand extends Command
+class IPLookupCommand extends Command
 {
     /**
      * The name and signature of the console command.
      */
-    protected $signature = 'geoip:lookup
+    protected $signature = 'ip:lookup
                             {ip : The IP address to lookup}
                             {--provider= : Use a specific provider}
                             {--json : Output as JSON}';
@@ -51,9 +51,9 @@ class GeoIPLookupCommand extends Command
 
         try {
             if ($provider) {
-                $result = GeoIP::lookupWith($provider, $ip);
+                $result = IP::lookupWith($provider, $ip);
             } else {
-                $result = GeoIP::lookup($ip);
+                $result = IP::lookup($ip);
             }
 
             if ($asJson) {
@@ -63,7 +63,7 @@ class GeoIPLookupCommand extends Command
             }
 
             return 0;
-        } catch (GeoIPException $e) {
+        } catch (IPException $e) {
             $this->error($e->getMessage());
             $this->newLine();
             $this->displaySponsorMessage();
@@ -76,7 +76,7 @@ class GeoIPLookupCommand extends Command
      */
     protected function displayResult($result): void
     {
-        $this->info("GeoIP Lookup Result for: {$result->ip}");
+        $this->info("IP Lookup Result for: {$result->ip}");
         $this->info("Provider: {$result->provider}");
         $this->newLine();
 

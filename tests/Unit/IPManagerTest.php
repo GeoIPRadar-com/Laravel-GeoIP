@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Laravel GeoIP - IP Geolocation with Automatic Fallback
+ * Laravel IP - IP Geolocation with Automatic Fallback
  *
- * @package     geoipradar/laravel-geoip
+ * @package     geoipradar/laravel-ip
  * @author      GeoIPRadar <support@geoipradar.com>
  * @copyright   GeoIPRadar.com
  * @license     MIT
@@ -14,26 +14,26 @@
  * ============================================================================
  */
 
-namespace GeoIPRadar\LaravelGeoIP\Tests\Unit;
+namespace GeoIPRadar\LaravelIP\Tests\Unit;
 
-use GeoIPRadar\LaravelGeoIP\GeoIPManager;
-use GeoIPRadar\LaravelGeoIP\Tests\TestCase;
+use GeoIPRadar\LaravelIP\IPManager;
+use GeoIPRadar\LaravelIP\Tests\TestCase;
 
-class GeoIPManagerTest extends TestCase
+class IPManagerTest extends TestCase
 {
     public function test_can_instantiate_manager(): void
     {
-        $manager = new GeoIPManager([
+        $manager = new IPManager([
             'providers' => ['ip-api'],
             'log_fallbacks' => false,
         ]);
 
-        $this->assertInstanceOf(GeoIPManager::class, $manager);
+        $this->assertInstanceOf(IPManager::class, $manager);
     }
 
     public function test_can_get_configured_providers(): void
     {
-        $manager = new GeoIPManager([
+        $manager = new IPManager([
             'providers' => ['ip-api', 'ipapi.co', 'ipwhois'],
             'log_fallbacks' => false,
         ]);
@@ -47,7 +47,7 @@ class GeoIPManagerTest extends TestCase
 
     public function test_can_get_specific_provider(): void
     {
-        $manager = new GeoIPManager([
+        $manager = new IPManager([
             'providers' => ['ip-api'],
             'log_fallbacks' => false,
         ]);
@@ -60,7 +60,7 @@ class GeoIPManagerTest extends TestCase
 
     public function test_returns_null_for_unconfigured_provider(): void
     {
-        $manager = new GeoIPManager([
+        $manager = new IPManager([
             'providers' => ['ip-api'],
             'log_fallbacks' => false,
         ]);
@@ -72,7 +72,7 @@ class GeoIPManagerTest extends TestCase
 
     public function test_geoipradar_not_configured_without_token(): void
     {
-        $manager = new GeoIPManager([
+        $manager = new IPManager([
             'providers' => ['geoipradar'],
             'provider_config' => [
                 'geoipradar' => [
@@ -87,7 +87,7 @@ class GeoIPManagerTest extends TestCase
 
     public function test_geoipradar_configured_with_token(): void
     {
-        $manager = new GeoIPManager([
+        $manager = new IPManager([
             'providers' => ['geoipradar'],
             'provider_config' => [
                 'geoipradar' => [
@@ -102,7 +102,7 @@ class GeoIPManagerTest extends TestCase
 
     public function test_providers_are_sorted_by_priority(): void
     {
-        $manager = new GeoIPManager([
+        $manager = new IPManager([
             'providers' => ['ipwhois', 'ip-api', 'geoipradar'],
             'provider_config' => [
                 'geoipradar' => ['token' => 'test'],

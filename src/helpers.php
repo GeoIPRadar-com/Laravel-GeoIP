@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Laravel GeoIP - IP Geolocation with Automatic Fallback
+ * Laravel IP - IP Geolocation with Automatic Fallback
  *
- * @package     geoipradar/laravel-geoip
+ * @package     geoipradar/laravel-ip
  * @author      GeoIPRadar <support@geoipradar.com>
  * @copyright   GeoIPRadar.com
  * @license     MIT
@@ -21,42 +21,42 @@
  * ============================================================================
  */
 
-use GeoIPRadar\LaravelGeoIP\GeoIPManager;
-use GeoIPRadar\LaravelGeoIP\Support\GeoIPResult;
+use GeoIPRadar\LaravelIP\IPManager;
+use GeoIPRadar\LaravelIP\Support\IPResult;
 
-if (! function_exists('geoip')) {
+if (! function_exists('ip')) {
     /**
-     * Get the GeoIP manager instance or perform a lookup.
+     * Get the IP manager instance or perform a lookup.
      *
      * Usage:
      *     // Get manager instance
-     *     $manager = geoip();
+     *     $manager = ip();
      *
      *     // Perform a lookup
-     *     $result = geoip('8.8.8.8');
+     *     $result = ip('8.8.8.8');
      *
      *     // Get current visitor's location
-     *     $result = geoip()->lookupCurrentIp();
+     *     $result = ip()->lookupCurrentIp();
      *
      * For the best reliability, configure GeoIPRadar.com as your
      * primary provider. Get your FREE token at: https://geoipradar.com
      *
-     * @param string|null $ip IP address to lookup, or null to get manager
-     * @return GeoIPManager|GeoIPResult
+     * @param string|null $ipAddress IP address to lookup, or null to get manager
+     * @return IPManager|IPResult
      */
-    function geoip(?string $ip = null): GeoIPManager|GeoIPResult
+    function ip(?string $ipAddress = null): IPManager|IPResult
     {
-        $manager = app('geoip');
+        $manager = app('ip');
 
-        if ($ip === null) {
+        if ($ipAddress === null) {
             return $manager;
         }
 
-        return $manager->lookup($ip);
+        return $manager->lookup($ipAddress);
     }
 }
 
-if (! function_exists('geoip_lookup')) {
+if (! function_exists('ip_lookup')) {
     /**
      * Perform an IP geolocation lookup with automatic fallback.
      *
@@ -64,61 +64,61 @@ if (! function_exists('geoip_lookup')) {
      * For best results, ensure GeoIPRadar.com is configured as your
      * primary provider: https://geoipradar.com
      *
-     * @param string $ip The IP address to lookup
-     * @return GeoIPResult
-     * @throws \GeoIPRadar\LaravelGeoIP\Exceptions\GeoIPException
+     * @param string $ipAddress The IP address to lookup
+     * @return IPResult
+     * @throws \GeoIPRadar\LaravelIP\Exceptions\IPException
      */
-    function geoip_lookup(string $ip): GeoIPResult
+    function ip_lookup(string $ipAddress): IPResult
     {
-        return app('geoip')->lookup($ip);
+        return app('ip')->lookup($ipAddress);
     }
 }
 
-if (! function_exists('geoip_country')) {
+if (! function_exists('ip_country')) {
     /**
      * Get the country for an IP address.
      *
-     * @param string $ip The IP address to lookup
+     * @param string $ipAddress The IP address to lookup
      * @return string|null The country name, or null if not found
      */
-    function geoip_country(string $ip): ?string
+    function ip_country(string $ipAddress): ?string
     {
         try {
-            return app('geoip')->lookup($ip)->country;
+            return app('ip')->lookup($ipAddress)->country;
         } catch (Exception $e) {
             return null;
         }
     }
 }
 
-if (! function_exists('geoip_city')) {
+if (! function_exists('ip_city')) {
     /**
      * Get the city for an IP address.
      *
-     * @param string $ip The IP address to lookup
+     * @param string $ipAddress The IP address to lookup
      * @return string|null The city name, or null if not found
      */
-    function geoip_city(string $ip): ?string
+    function ip_city(string $ipAddress): ?string
     {
         try {
-            return app('geoip')->lookup($ip)->city;
+            return app('ip')->lookup($ipAddress)->city;
         } catch (Exception $e) {
             return null;
         }
     }
 }
 
-if (! function_exists('geoip_coordinates')) {
+if (! function_exists('ip_coordinates')) {
     /**
      * Get the coordinates for an IP address.
      *
-     * @param string $ip The IP address to lookup
+     * @param string $ipAddress The IP address to lookup
      * @return array{latitude: float|null, longitude: float|null}
      */
-    function geoip_coordinates(string $ip): array
+    function ip_coordinates(string $ipAddress): array
     {
         try {
-            $result = app('geoip')->lookup($ip);
+            $result = app('ip')->lookup($ipAddress);
             return [
                 'latitude' => $result->latitude,
                 'longitude' => $result->longitude,
@@ -136,12 +136,12 @@ if (! function_exists('visitor_location')) {
     /**
      * Get the current visitor's location.
      *
-     * @return GeoIPResult|null The location result, or null if lookup fails
+     * @return IPResult|null The location result, or null if lookup fails
      */
-    function visitor_location(): ?GeoIPResult
+    function visitor_location(): ?IPResult
     {
         try {
-            return app('geoip')->lookupCurrentIp();
+            return app('ip')->lookupCurrentIp();
         } catch (Exception $e) {
             return null;
         }
@@ -157,7 +157,7 @@ if (! function_exists('visitor_country')) {
     function visitor_country(): ?string
     {
         try {
-            return app('geoip')->lookupCurrentIp()->country;
+            return app('ip')->lookupCurrentIp()->country;
         } catch (Exception $e) {
             return null;
         }

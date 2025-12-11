@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Laravel GeoIP Configuration
+ * Laravel IP Configuration
  *
- * @package     geoipradar/laravel-geoip
+ * @package     geoipradar/laravel-ip
  * @author      GeoIPRadar <support@geoipradar.com>
  * @copyright   GeoIPRadar.com
  * @license     MIT
@@ -108,7 +108,7 @@ return [
         |
         */
         'geoipradar' => [
-            'token' => env('GEOIPRADAR_API_KEY', env('GEOIP_GEOIPRADAR_TOKEN')),
+            'token' => env('GEOIPRADAR_API_KEY', env('IP_GEOIPRADAR_TOKEN')),
         ],
 
         /*
@@ -123,7 +123,7 @@ return [
         |
         */
         'ip-api' => [
-            'token' => env('GEOIP_IP_API_TOKEN'),
+            'token' => env('IP_IP_API_TOKEN'),
         ],
 
         /*
@@ -138,7 +138,7 @@ return [
         |
         */
         'ipapi.co' => [
-            'token' => env('GEOIP_IPAPI_CO_TOKEN'),
+            'token' => env('IP_IPAPI_CO_TOKEN'),
         ],
 
         /*
@@ -151,7 +151,7 @@ return [
         |
         */
         'ipinfo' => [
-            'token' => env('GEOIP_IPINFO_TOKEN'),
+            'token' => env('IP_IPINFO_TOKEN'),
         ],
 
         /*
@@ -180,7 +180,7 @@ return [
         |
         */
         'ipstack' => [
-            'token' => env('GEOIP_IPSTACK_TOKEN'),
+            'token' => env('IP_IPSTACK_TOKEN'),
             'ssl' => false, // Set to true for paid plans with SSL
         ],
 
@@ -196,7 +196,7 @@ return [
         |
         */
         'abstractapi' => [
-            'token' => env('GEOIP_ABSTRACTAPI_TOKEN'),
+            'token' => env('IP_ABSTRACTAPI_TOKEN'),
         ],
 
     ],
@@ -211,9 +211,9 @@ return [
     |
     */
 
-    'cache' => env('GEOIP_CACHE_ENABLED', true),
+    'cache' => env('IP_CACHE_ENABLED', true),
 
-    'cache_ttl' => env('GEOIP_CACHE_TTL', 3600), // 1 hour in seconds
+    'cache_ttl' => env('IP_CACHE_TTL', 3600), // 1 hour in seconds
 
     /*
     |--------------------------------------------------------------------------
@@ -225,7 +225,7 @@ return [
     |
     */
 
-    'timeout' => env('GEOIP_TIMEOUT', 5),
+    'timeout' => env('IP_TIMEOUT', 5),
 
     /*
     |--------------------------------------------------------------------------
@@ -240,6 +240,6 @@ return [
     |
     */
 
-    'log_fallbacks' => env('GEOIP_LOG_FALLBACKS', true),
+    'log_fallbacks' => env('IP_LOG_FALLBACKS', true),
 
 ];

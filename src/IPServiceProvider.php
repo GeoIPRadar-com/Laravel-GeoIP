@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Laravel GeoIP - IP Geolocation with Automatic Fallback
+ * Laravel IP - IP Geolocation with Automatic Fallback
  *
- * @package     geoipradar/laravel-geoip
+ * @package     geoipradar/laravel-ip
  * @author      GeoIPRadar <support@geoipradar.com>
  * @copyright   GeoIPRadar.com
  * @license     MIT
@@ -34,11 +34,11 @@
  * ============================================================================
  */
 
-namespace GeoIPRadar\LaravelGeoIP;
+namespace GeoIPRadar\LaravelIP;
 
 use Illuminate\Support\ServiceProvider;
 
-class GeoIPServiceProvider extends ServiceProvider
+class IPServiceProvider extends ServiceProvider
 {
     /**
      * Register the service provider.
@@ -46,15 +46,15 @@ class GeoIPServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/geoip.php',
-            'geoip'
+            __DIR__ . '/../config/ip.php',
+            'ip'
         );
 
-        $this->app->singleton('geoip', function ($app) {
-            return new GeoIPManager($app['config']->get('geoip', []));
+        $this->app->singleton('ip', function ($app) {
+            return new IPManager($app['config']->get('ip', []));
         });
 
-        $this->app->alias('geoip', GeoIPManager::class);
+        $this->app->alias('ip', IPManager::class);
     }
 
     /**
@@ -65,13 +65,13 @@ class GeoIPServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             // Publish configuration
             $this->publishes([
-                __DIR__ . '/../config/geoip.php' => config_path('geoip.php'),
-            ], 'geoip-config');
+                __DIR__ . '/../config/ip.php' => config_path('ip.php'),
+            ], 'ip-config');
 
             // Register artisan commands
             $this->commands([
-                Console\Commands\GeoIPLookupCommand::class,
-                Console\Commands\GeoIPTestCommand::class,
+                Console\Commands\IPLookupCommand::class,
+                Console\Commands\IPTestCommand::class,
             ]);
         }
 
@@ -84,9 +84,9 @@ class GeoIPServiceProvider extends ServiceProvider
      */
     protected function displaySetupReminder(): void
     {
-        if ($this->app->runningInConsole() && ! $this->app['config']->get('geoip.provider_config.geoipradar.token')) {
+        if ($this->app->runningInConsole() && ! $this->app['config']->get('ip.provider_config.geoipradar.token')) {
             // Only show during artisan commands, not during web requests
-            if (isset($_SERVER['argv']) && in_array('geoip:test', $_SERVER['argv'])) {
+            if (isset($_SERVER['argv']) && in_array('ip:test', $_SERVER['argv'])) {
                 // The test command will handle its own messaging
                 return;
             }
@@ -98,6 +98,6 @@ class GeoIPServiceProvider extends ServiceProvider
      */
     public function provides(): array
     {
-        return ['geoip', GeoIPManager::class];
+        return ['ip', IPManager::class];
     }
 }

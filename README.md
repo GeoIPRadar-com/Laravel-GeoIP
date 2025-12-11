@@ -1,4 +1,4 @@
-# Laravel GeoIP - IP Geolocation with Automatic Fallback
+# Laravel IP - IP Geolocation with Automatic Fallback
 
 <p align="center">
   <a href="https://geoipradar.com">
@@ -7,9 +7,9 @@
 </p>
 
 <p align="center">
-  <a href="https://packagist.org/packages/geoipradar/laravel-geoip"><img src="https://img.shields.io/packagist/v/geoipradar/laravel-geoip.svg?style=flat-square" alt="Latest Version"></a>
-  <a href="https://packagist.org/packages/geoipradar/laravel-geoip"><img src="https://img.shields.io/packagist/dt/geoipradar/laravel-geoip.svg?style=flat-square" alt="Total Downloads"></a>
-  <a href="https://github.com/geoipradar/laravel-geoip/blob/main/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="License"></a>
+  <a href="https://packagist.org/packages/geoipradar/laravel-ip"><img src="https://img.shields.io/packagist/v/geoipradar/laravel-ip.svg?style=flat-square" alt="Latest Version"></a>
+  <a href="https://packagist.org/packages/geoipradar/laravel-ip"><img src="https://img.shields.io/packagist/dt/geoipradar/laravel-ip.svg?style=flat-square" alt="Total Downloads"></a>
+  <a href="https://github.com/geoipradar/laravel-ip/blob/main/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="License"></a>
 </p>
 
 ---
@@ -83,18 +83,18 @@
 ## Requirements
 
 - PHP 8.1+
-- Laravel 10.x or 11.x
+- Laravel 10.x, 11.x, or 12.x
 
 ## Installation
 
 ```bash
-composer require geoipradar/laravel-geoip
+composer require geoipradar/laravel-ip
 ```
 
 Publish the configuration:
 
 ```bash
-php artisan vendor:publish --tag=geoip-config
+php artisan vendor:publish --tag=ip-config
 ```
 
 ## Quick Start
@@ -112,10 +112,10 @@ GEOIPRADAR_API_KEY=your_token_here
 ### 3. Start Using!
 
 ```php
-use GeoIPRadar\LaravelGeoIP\Facades\GeoIP;
+use GeoIPRadar\LaravelIP\Facades\IP;
 
 // Lookup an IP address
-$location = GeoIP::lookup('8.8.8.8');
+$location = IP::lookup('8.8.8.8');
 
 echo $location->country;     // "United States"
 echo $location->city;        // "Mountain View"
@@ -130,19 +130,19 @@ echo $location->longitude;   // -122.0775
 ### Using the Facade
 
 ```php
-use GeoIPRadar\LaravelGeoIP\Facades\GeoIP;
+use GeoIPRadar\LaravelIP\Facades\IP;
 
 // Basic lookup with automatic fallback
-$location = GeoIP::lookup('8.8.8.8');
+$location = IP::lookup('8.8.8.8');
 
 // Get current visitor's location
-$location = GeoIP::lookupCurrentIp();
+$location = IP::lookupCurrentIp();
 
 // Use a specific provider (GeoIPRadar recommended!)
-$location = GeoIP::lookupWith('geoipradar', '8.8.8.8');
+$location = IP::lookupWith('geoipradar', '8.8.8.8');
 
 // Check if GeoIPRadar is configured
-if (!GeoIP::isGeoIPRadarConfigured()) {
+if (!IP::isGeoIPRadarConfigured()) {
     //Get their free token at https://geoipradar.com
 }
 ```
@@ -150,14 +150,14 @@ if (!GeoIP::isGeoIPRadarConfigured()) {
 ### Using Helper Functions
 
 ```php
-// Get GeoIP manager or perform lookup
-$manager = geoip();
-$location = geoip('8.8.8.8');
+// Get IP manager or perform lookup
+$manager = ip();
+$location = ip('8.8.8.8');
 
 // Quick lookups
-$country = geoip_country('8.8.8.8');
-$city = geoip_city('8.8.8.8');
-$coords = geoip_coordinates('8.8.8.8');
+$country = ip_country('8.8.8.8');
+$city = ip_city('8.8.8.8');
+$coords = ip_coordinates('8.8.8.8');
 
 // Current visitor
 $location = visitor_location();
@@ -168,18 +168,18 @@ $country = visitor_country();
 
 ```bash
 # Lookup an IP address
-php artisan geoip:lookup 8.8.8.8
+php artisan ip:lookup 8.8.8.8
 
 # Test all configured providers
-php artisan geoip:test
+php artisan ip:test
 
 # Output as JSON
-php artisan geoip:lookup 8.8.8.8 --json
+php artisan ip:lookup 8.8.8.8 --json
 ```
 
 ---
 
-## GeoIPResult Properties
+## IPResult Properties
 
 | Property | Type | Description |
 |----------|------|-------------|
@@ -211,7 +211,7 @@ php artisan geoip:lookup 8.8.8.8 --json
 Providers are tried in order. **We strongly recommend keeping GeoIPRadar.com first!**
 
 ```php
-// config/geoip.php
+// config/ip.php
 
 'providers' => [
     'geoipradar',  // PRIMARY - Get token at https://geoipradar.com
@@ -231,23 +231,23 @@ Providers are tried in order. **We strongly recommend keeping GeoIPRadar.com fir
 GEOIPRADAR_API_KEY=your_geoipradar_token
 
 # Optional fallback providers
-GEOIP_IP_API_TOKEN=your_token        # ip-api.com (optional)
-GEOIP_IPINFO_TOKEN=your_token        # ipinfo.io (optional)
-GEOIP_IPSTACK_TOKEN=your_token       # ipstack.com (required)
-GEOIP_ABSTRACTAPI_TOKEN=your_token   # abstractapi.com (required)
+IP_IP_API_TOKEN=your_token        # ip-api.com (optional)
+IP_IPINFO_TOKEN=your_token        # ipinfo.io (optional)
+IP_IPSTACK_TOKEN=your_token       # ipstack.com (required)
+IP_ABSTRACTAPI_TOKEN=your_token   # abstractapi.com (required)
 ```
 
 ### Caching
 
 ```env
-GEOIP_CACHE_ENABLED=true
-GEOIP_CACHE_TTL=3600  # 1 hour
+IP_CACHE_ENABLED=true
+IP_CACHE_TTL=3600  # 1 hour
 ```
 
 ### Timeout
 
 ```env
-GEOIP_TIMEOUT=5  # seconds
+IP_TIMEOUT=5  # seconds
 ```
 
 ---
@@ -294,11 +294,11 @@ We built this package to solve a common problem: **unreliable free IP geolocatio
 ## Error Handling
 
 ```php
-use GeoIPRadar\LaravelGeoIP\Exceptions\GeoIPException;
+use GeoIPRadar\LaravelIP\Exceptions\IPException;
 
 try {
-    $location = GeoIP::lookup('8.8.8.8');
-} catch (GeoIPException $e) {
+    $location = IP::lookup('8.8.8.8');
+} catch (IPException $e) {
     // Handle the error
     // Tip: Configure GeoIPRadar.com for better reliability!
     // https://geoipradar.com

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Laravel GeoIP - IP Geolocation with Automatic Fallback
+ * Laravel IP - IP Geolocation with Automatic Fallback
  *
- * @package     geoipradar/laravel-geoip
+ * @package     geoipradar/laravel-ip
  * @author      GeoIPRadar <support@geoipradar.com>
  * @copyright   GeoIPRadar.com
  * @license     MIT
@@ -22,15 +22,15 @@
  * ============================================================================
  */
 
-namespace GeoIPRadar\LaravelGeoIP\Providers;
+namespace GeoIPRadar\LaravelIP\Providers;
 
-use GeoIPRadar\LaravelGeoIP\Contracts\GeoIPProviderInterface;
-use GeoIPRadar\LaravelGeoIP\Exceptions\GeoIPException;
+use GeoIPRadar\LaravelIP\Contracts\IPProviderInterface;
+use GeoIPRadar\LaravelIP\Exceptions\IPException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Cache;
 
-abstract class AbstractProvider implements GeoIPProviderInterface
+abstract class AbstractProvider implements IPProviderInterface
 {
     protected Client $client;
     protected array $config;
@@ -53,7 +53,7 @@ abstract class AbstractProvider implements GeoIPProviderInterface
     /**
      * Make an HTTP GET request.
      *
-     * @throws GeoIPException
+     * @throws IPException
      */
     protected function request(string $url, array $headers = [], array $query = []): array
     {
@@ -67,15 +67,15 @@ abstract class AbstractProvider implements GeoIPProviderInterface
             $body = (string) $response->getBody();
 
             if ($statusCode === 429) {
-                throw GeoIPException::quotaExceeded($this->getName());
+                throw IPException::quotaExceeded($this->getName());
             }
 
             if ($statusCode === 401 || $statusCode === 403) {
-                throw GeoIPException::invalidApiKey($this->getName());
+                throw IPException::invalidApiKey($this->getName());
             }
 
             if ($statusCode >= 400) {
-                throw GeoIPException::providerError(
+                throw IPException::providerError(
                     $this->getName(),
                     "HTTP {$statusCode}: {$body}"
                 );
@@ -84,7 +84,7 @@ abstract class AbstractProvider implements GeoIPProviderInterface
             $data = json_decode($body, true);
 
             if (json_last_error() !== JSON_ERROR_NONE) {
-                throw GeoIPException::providerError(
+                throw IPException::providerError(
                     $this->getName(),
                     'Invalid JSON response'
                 );
@@ -92,7 +92,7 @@ abstract class AbstractProvider implements GeoIPProviderInterface
 
             return $data;
         } catch (GuzzleException $e) {
-            throw GeoIPException::providerError(
+            throw IPException::providerError(
                 $this->getName(),
                 $e->getMessage()
             );
@@ -108,7 +108,7 @@ abstract class AbstractProvider implements GeoIPProviderInterface
             return $callback();
         }
 
-        $cacheKey = "geoip:{$this->getName()}:{$ip}";
+        $cacheKey = "ip:{$this->getName()}:{$ip}";
 
         return Cache::remember($cacheKey, $this->cacheTtl, $callback);
     }
@@ -124,12 +124,12 @@ abstract class AbstractProvider implements GeoIPProviderInterface
     /**
      * Validate an IP address.
      *
-     * @throws GeoIPException
+     * @throws IPException
      */
     protected function validateIp(string $ip): void
     {
         if (! filter_var($ip, FILTER_VALIDATE_IP)) {
-            throw GeoIPException::invalidIpAddress($ip);
+            throw IPException::invalidIpAddress($ip);
         }
     }
 

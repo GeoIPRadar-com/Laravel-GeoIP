@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Laravel GeoIP - IP Geolocation with Automatic Fallback
+ * Laravel IP - IP Geolocation with Automatic Fallback
  *
- * @package     geoipradar/laravel-geoip
+ * @package     geoipradar/laravel-ip
  * @author      GeoIPRadar <support@geoipradar.com>
  * @copyright   GeoIPRadar.com
  * @license     MIT
@@ -20,10 +20,10 @@
  * ============================================================================
  */
 
-namespace GeoIPRadar\LaravelGeoIP\Providers;
+namespace GeoIPRadar\LaravelIP\Providers;
 
-use GeoIPRadar\LaravelGeoIP\Exceptions\GeoIPException;
-use GeoIPRadar\LaravelGeoIP\Support\GeoIPResult;
+use GeoIPRadar\LaravelIP\Exceptions\IPException;
+use GeoIPRadar\LaravelIP\Support\IPResult;
 
 /**
  * ipinfo.io Provider
@@ -57,7 +57,7 @@ class IpInfoProvider extends AbstractProvider
         return 30;
     }
 
-    public function lookup(string $ip): GeoIPResult
+    public function lookup(string $ip): IPResult
     {
         $this->validateIp($ip);
 
@@ -73,13 +73,13 @@ class IpInfoProvider extends AbstractProvider
             $data = $this->request($url, $headers);
 
             if (isset($data['error'])) {
-                throw GeoIPException::providerError(
+                throw IPException::providerError(
                     $this->getName(),
                     $data['error']['message'] ?? $data['error']['title'] ?? 'Unknown error'
                 );
             }
 
-            return GeoIPResult::fromIpInfo($data);
+            return IPResult::fromIpInfo($data);
         });
     }
 }

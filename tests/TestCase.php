@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Laravel GeoIP - IP Geolocation with Automatic Fallback
+ * Laravel IP - IP Geolocation with Automatic Fallback
  *
- * @package     geoipradar/laravel-geoip
+ * @package     geoipradar/laravel-ip
  * @author      GeoIPRadar <support@geoipradar.com>
  * @copyright   GeoIPRadar.com
  * @license     MIT
@@ -15,9 +15,9 @@
  * ============================================================================
  */
 
-namespace GeoIPRadar\LaravelGeoIP\Tests;
+namespace GeoIPRadar\LaravelIP\Tests;
 
-use GeoIPRadar\LaravelGeoIP\GeoIPServiceProvider;
+use GeoIPRadar\LaravelIP\IPServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
@@ -30,25 +30,25 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app): array
     {
         return [
-            GeoIPServiceProvider::class,
+            IPServiceProvider::class,
         ];
     }
 
     protected function getPackageAliases($app): array
     {
         return [
-            'GeoIP' => \GeoIPRadar\LaravelGeoIP\Facades\GeoIP::class,
+            'IP' => \GeoIPRadar\LaravelIP\Facades\IP::class,
         ];
     }
 
     protected function defineEnvironment($app): void
     {
-        $app['config']->set('geoip.providers', [
+        $app['config']->set('ip.providers', [
             'ip-api',
             'ipapi.co',
         ]);
 
-        $app['config']->set('geoip.cache', false);
-        $app['config']->set('geoip.log_fallbacks', false);
+        $app['config']->set('ip.cache', false);
+        $app['config']->set('ip.log_fallbacks', false);
     }
 }

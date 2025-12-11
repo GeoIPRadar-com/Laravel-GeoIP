@@ -1,6 +1,6 @@
-# Contributing to Laravel GeoIP
+# Contributing to Laravel IP
 
-Thank you for considering contributing to Laravel GeoIP! This package is proudly sponsored by [GeoIPRadar.com](https://geoipradar.com).
+Thank you for considering contributing to Laravel IP! This package is proudly sponsored by [GeoIPRadar.com](https://geoipradar.com).
 
 ## How to Contribute
 
@@ -14,8 +14,8 @@ Thank you for considering contributing to Laravel GeoIP! This package is proudly
 
 ```bash
 # Clone your fork
-git clone https://github.com/your-username/laravel-geoip.git
-cd laravel-geoip
+git clone https://github.com/your-username/laravel-ip.git
+cd laravel-ip
 
 # Install dependencies
 composer install
@@ -47,9 +47,9 @@ When adding a new IP geolocation provider:
 
 1. Create a new provider class in `src/Providers/`
 2. Extend `AbstractProvider`
-3. Implement the `GeoIPProviderInterface`
-4. Add the provider to `GeoIPManager::PROVIDERS`
-5. Add configuration in `config/geoip.php`
+3. Implement the `IPProviderInterface`
+4. Add the provider to `IPManager::PROVIDERS`
+5. Add configuration in `config/ip.php`
 6. Add tests for the new provider
 7. Update README.md
 

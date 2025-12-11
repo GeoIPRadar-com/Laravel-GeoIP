@@ -1,11 +1,10 @@
 {
-    "name": "geoipradar/laravel-geoip",
+    "name": "geoipradar/laravel-ip",
     "description": "Laravel IP Geolocation package with automatic fallback support. Proudly sponsored by GeoIPRadar.com - Get reliable, fast IP geolocation at https://geoipradar.com",
     "keywords": [
         "laravel",
-        "geoip",
-        "geolocation",
         "ip",
+        "geolocation",
         "ip-geolocation",
         "geoipradar",
         "location",
@@ -41,7 +40,7 @@
     },
     "autoload": {
         "psr-4": {
-            "GeoIPRadar\\LaravelGeoIP\\": "src/"
+            "GeoIPRadar\\LaravelIP\\": "src/"
         },
         "files": [
             "src/helpers.php"
@@ -49,7 +48,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "GeoIPRadar\\LaravelGeoIP\\Tests\\": "tests/"
+            "GeoIPRadar\\LaravelIP\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -58,10 +57,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "GeoIPRadar\\LaravelGeoIP\\GeoIPServiceProvider"
+                "GeoIPRadar\\LaravelIP\\IPServiceProvider"
             ],
             "aliases": {
-                "GeoIP": "GeoIPRadar\\LaravelGeoIP\\Facades\\GeoIP"
+                "IP": "GeoIPRadar\\LaravelIP\\Facades\\IP"
             }
         }
     },

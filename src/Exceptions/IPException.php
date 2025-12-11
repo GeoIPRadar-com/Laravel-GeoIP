@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Laravel GeoIP - IP Geolocation with Automatic Fallback
+ * Laravel IP - IP Geolocation with Automatic Fallback
  *
- * @package     geoipradar/laravel-geoip
+ * @package     geoipradar/laravel-ip
  * @author      GeoIPRadar <support@geoipradar.com>
  * @copyright   GeoIPRadar.com
  * @license     MIT
@@ -21,11 +21,11 @@
  * ============================================================================
  */
 
-namespace GeoIPRadar\LaravelGeoIP\Exceptions;
+namespace GeoIPRadar\LaravelIP\Exceptions;
 
 use Exception;
 
-class GeoIPException extends Exception
+class IPException extends Exception
 {
     protected ?string $provider = null;
 

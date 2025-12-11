@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Laravel GeoIP - IP Geolocation with Automatic Fallback
+ * Laravel IP - IP Geolocation with Automatic Fallback
  *
- * @package     geoipradar/laravel-geoip
+ * @package     geoipradar/laravel-ip
  * @author      GeoIPRadar <support@geoipradar.com>
  * @copyright   GeoIPRadar.com
  * @license     MIT
@@ -14,12 +14,12 @@
  * ============================================================================
  */
 
-namespace GeoIPRadar\LaravelGeoIP\Tests\Unit;
+namespace GeoIPRadar\LaravelIP\Tests\Unit;
 
-use GeoIPRadar\LaravelGeoIP\Support\GeoIPResult;
-use GeoIPRadar\LaravelGeoIP\Tests\TestCase;
+use GeoIPRadar\LaravelIP\Support\IPResult;
+use GeoIPRadar\LaravelIP\Tests\TestCase;
 
-class GeoIPResultTest extends TestCase
+class IPResultTest extends TestCase
 {
     public function test_can_create_result_from_geoipradar_response(): void
     {
@@ -36,7 +36,7 @@ class GeoIPResultTest extends TestCase
             'timezone' => 'America/Los_Angeles',
         ];
 
-        $result = GeoIPResult::fromGeoIPRadar($data);
+        $result = IPResult::fromGeoIPRadar($data);
 
         $this->assertEquals('8.8.8.8', $result->ip);
         $this->assertEquals('United States', $result->country);
@@ -64,7 +64,7 @@ class GeoIPResultTest extends TestCase
             'isp' => 'Google LLC',
         ];
 
-        $result = GeoIPResult::fromIpApi($data);
+        $result = IPResult::fromIpApi($data);
 
         $this->assertEquals('8.8.8.8', $result->ip);
         $this->assertEquals('United States', $result->country);
@@ -97,7 +97,7 @@ class GeoIPResultTest extends TestCase
             ],
         ];
 
-        $result = GeoIPResult::fromIpWhois($data);
+        $result = IPResult::fromIpWhois($data);
 
         $this->assertEquals('8.8.8.8', $result->ip);
         $this->assertEquals('United States', $result->country);
@@ -108,7 +108,7 @@ class GeoIPResultTest extends TestCase
 
     public function test_has_coordinates_returns_true_when_both_present(): void
     {
-        $result = new GeoIPResult(
+        $result = new IPResult(
             ip: '8.8.8.8',
             latitude: 37.4056,
             longitude: -122.0775
@@ -119,7 +119,7 @@ class GeoIPResultTest extends TestCase
 
     public function test_has_coordinates_returns_false_when_missing(): void
     {
-        $result = new GeoIPResult(
+        $result = new IPResult(
             ip: '8.8.8.8',
             latitude: null,
             longitude: null
@@ -130,7 +130,7 @@ class GeoIPResultTest extends TestCase
 
     public function test_get_location_returns_formatted_string(): void
     {
-        $result = new GeoIPResult(
+        $result = new IPResult(
             ip: '8.8.8.8',
             city: 'Mountain View',
             region: 'California',
@@ -142,7 +142,7 @@ class GeoIPResultTest extends TestCase
 
     public function test_can_convert_to_array(): void
     {
-        $result = new GeoIPResult(
+        $result = new IPResult(
             ip: '8.8.8.8',
             country: 'United States',
             city: 'Mountain View'
@@ -158,7 +158,7 @@ class GeoIPResultTest extends TestCase
 
     public function test_can_convert_to_json(): void
     {
-        $result = new GeoIPResult(
+        $result = new IPResult(
             ip: '8.8.8.8',
             country: 'United States'
         );
@@ -172,7 +172,7 @@ class GeoIPResultTest extends TestCase
 
     public function test_implements_json_serializable(): void
     {
-        $result = new GeoIPResult(
+        $result = new IPResult(
             ip: '8.8.8.8',
             country: 'United States'
         );

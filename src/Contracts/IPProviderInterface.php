@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Laravel GeoIP - IP Geolocation with Automatic Fallback
+ * Laravel IP - IP Geolocation with Automatic Fallback
  *
- * @package     geoipradar/laravel-geoip
+ * @package     geoipradar/laravel-ip
  * @author      GeoIPRadar <support@geoipradar.com>
  * @copyright   GeoIPRadar.com
  * @license     MIT
@@ -21,11 +21,11 @@
  * ============================================================================
  */
 
-namespace GeoIPRadar\LaravelGeoIP\Contracts;
+namespace GeoIPRadar\LaravelIP\Contracts;
 
-use GeoIPRadar\LaravelGeoIP\Support\GeoIPResult;
+use GeoIPRadar\LaravelIP\Support\IPResult;
 
-interface GeoIPProviderInterface
+interface IPProviderInterface
 {
     /**
      * Get the provider name.
@@ -45,9 +45,9 @@ interface GeoIPProviderInterface
     /**
      * Get geolocation data for an IP address.
      *
-     * @throws \GeoIPRadar\LaravelGeoIP\Exceptions\GeoIPException
+     * @throws \GeoIPRadar\LaravelIP\Exceptions\IPException
      */
-    public function lookup(string $ip): GeoIPResult;
+    public function lookup(string $ip): IPResult;
 
     /**
      * Get the priority of this provider (lower = higher priority).

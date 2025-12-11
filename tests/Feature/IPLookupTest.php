@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Laravel GeoIP - IP Geolocation with Automatic Fallback
+ * Laravel IP - IP Geolocation with Automatic Fallback
  *
- * @package     geoipradar/laravel-geoip
+ * @package     geoipradar/laravel-ip
  * @author      GeoIPRadar <support@geoipradar.com>
  * @copyright   GeoIPRadar.com
  * @license     MIT
@@ -17,22 +17,22 @@
  * ============================================================================
  */
 
-namespace GeoIPRadar\LaravelGeoIP\Tests\Feature;
+namespace GeoIPRadar\LaravelIP\Tests\Feature;
 
-use GeoIPRadar\LaravelGeoIP\Facades\GeoIP;
-use GeoIPRadar\LaravelGeoIP\Support\GeoIPResult;
-use GeoIPRadar\LaravelGeoIP\Tests\TestCase;
+use GeoIPRadar\LaravelIP\Facades\IP;
+use GeoIPRadar\LaravelIP\Support\IPResult;
+use GeoIPRadar\LaravelIP\Tests\TestCase;
 
-class GeoIPLookupTest extends TestCase
+class IPLookupTest extends TestCase
 {
     /**
      * @group integration
      */
     public function test_can_lookup_google_dns(): void
     {
-        $result = GeoIP::lookup('8.8.8.8');
+        $result = IP::lookup('8.8.8.8');
 
-        $this->assertInstanceOf(GeoIPResult::class, $result);
+        $this->assertInstanceOf(IPResult::class, $result);
         $this->assertEquals('8.8.8.8', $result->ip);
         $this->assertNotNull($result->country);
         $this->assertEquals('United States', $result->country);
@@ -43,9 +43,9 @@ class GeoIPLookupTest extends TestCase
      */
     public function test_can_lookup_cloudflare_dns(): void
     {
-        $result = GeoIP::lookup('1.1.1.1');
+        $result = IP::lookup('1.1.1.1');
 
-        $this->assertInstanceOf(GeoIPResult::class, $result);
+        $this->assertInstanceOf(IPResult::class, $result);
         $this->assertEquals('1.1.1.1', $result->ip);
         $this->assertNotNull($result->country);
     }
@@ -56,30 +56,30 @@ class GeoIPLookupTest extends TestCase
     public function test_can_lookup_ipv6_address(): void
     {
         // Google's IPv6 DNS
-        $result = GeoIP::lookup('2001:4860:4860::8888');
+        $result = IP::lookup('2001:4860:4860::8888');
 
-        $this->assertInstanceOf(GeoIPResult::class, $result);
+        $this->assertInstanceOf(IPResult::class, $result);
         $this->assertNotNull($result->country);
     }
 
     public function test_facade_is_registered(): void
     {
-        $this->assertTrue(class_exists(\GeoIPRadar\LaravelGeoIP\Facades\GeoIP::class));
+        $this->assertTrue(class_exists(\GeoIPRadar\LaravelIP\Facades\IP::class));
     }
 
     public function test_can_get_manager_via_app(): void
     {
-        $manager = app('geoip');
+        $manager = app('ip');
 
-        $this->assertInstanceOf(\GeoIPRadar\LaravelGeoIP\GeoIPManager::class, $manager);
+        $this->assertInstanceOf(\GeoIPRadar\LaravelIP\IPManager::class, $manager);
     }
 
     public function test_helper_function_exists(): void
     {
-        $this->assertTrue(function_exists('geoip'));
-        $this->assertTrue(function_exists('geoip_lookup'));
-        $this->assertTrue(function_exists('geoip_country'));
-        $this->assertTrue(function_exists('geoip_city'));
+        $this->assertTrue(function_exists('ip'));
+        $this->assertTrue(function_exists('ip_lookup'));
+        $this->assertTrue(function_exists('ip_country'));
+        $this->assertTrue(function_exists('ip_city'));
     }
 
     /**
@@ -87,32 +87,32 @@ class GeoIPLookupTest extends TestCase
      */
     public function test_helper_function_returns_result(): void
     {
-        $result = geoip('8.8.8.8');
+        $result = ip('8.8.8.8');
 
-        $this->assertInstanceOf(GeoIPResult::class, $result);
+        $this->assertInstanceOf(IPResult::class, $result);
         $this->assertEquals('8.8.8.8', $result->ip);
     }
 
     /**
      * @group integration
      */
-    public function test_geoip_country_helper_returns_country(): void
+    public function test_ip_country_helper_returns_country(): void
     {
-        $country = geoip_country('8.8.8.8');
+        $country = ip_country('8.8.8.8');
 
         $this->assertEquals('United States', $country);
     }
 
     public function test_invalid_ip_throws_exception(): void
     {
-        $this->expectException(\GeoIPRadar\LaravelGeoIP\Exceptions\GeoIPException::class);
+        $this->expectException(\GeoIPRadar\LaravelIP\Exceptions\IPException::class);
 
-        GeoIP::lookup('not-an-ip');
+        IP::lookup('not-an-ip');
     }
 
     public function test_configured_providers_list(): void
     {
-        $providers = GeoIP::getConfiguredProviders();
+        $providers = IP::getConfiguredProviders();
 
         $this->assertIsArray($providers);
         $this->assertNotEmpty($providers);
